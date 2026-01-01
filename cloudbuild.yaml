@@ -33,7 +33,7 @@ steps:
       - '--image'
       - 'gcr.io/$PROJECT_ID/smartsupport-backend:$COMMIT_SHA'
       - '--region'
-      - 'us-central1'
+      - 'europe-west3'  # (Bölgene göre burası us-central1 da olabilir)
       - '--platform'
       - 'managed'
       - '--port'
@@ -47,8 +47,7 @@ steps:
       - '--max-instances'
       - '10'
       - '--allow-unauthenticated'
-      - '--set-env-vars'
-      - 'PORT=8080'
+      
 
 images:
   - 'gcr.io/$PROJECT_ID/smartsupport-backend:$COMMIT_SHA'
