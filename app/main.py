@@ -51,14 +51,20 @@ app.add_middleware(
 
 @app.on_event("startup")
 async def startup_event():
-    """Initialize models and database on application startup."""
+    """
+    Initialize models and database on application startup.
+    
+    CRITICAL: This function must NOT raise exceptions, otherwise Cloud Run
+    will kill the container. The server MUST start listening on the port.
+    """
     logger.info("Initializing database...")
     try:
         init_db()
         logger.info("Database initialized successfully")
     except Exception as e:
         logger.error(f"Failed to initialize database: {str(e)}")
-        raise
+        logger.warning("Server will continue to start despite database initialization failure")
+        # DO NOT raise - allow server to start
     
     logger.info("Loading ML models...")
     try:
@@ -66,7 +72,8 @@ async def startup_event():
         logger.info("Models loaded successfully")
     except Exception as e:
         logger.error(f"Failed to load models: {str(e)}")
-        raise
+        logger.warning("Server will continue to start despite model loading failure (lazy loading will be used)")
+        # DO NOT raise - allow server to start (models will lazy-load on first request)
 
 
 @app.get("/", tags=["Health"])
