@@ -1,0 +1,21 @@
+# DVC configuration template
+# Copy this to .dvc/config after running: dvc init
+# 
+# To set up Google Cloud Storage:
+#   dvc remote add -d gcs gs://your-bucket-name/dvc-storage
+#
+# To set up Google Drive:
+#   dvc remote add -d gdrive gdrive://your-folder-id
+
+[core]
+    # remote = gcs  # Uncomment after configuring remote
+    autostage = true
+
+# Uncomment and configure after setting up remote:
+# ['remote "gcs"']
+#     url = gs://your-bucket-name/dvc-storage
+#     # credentialpath = /path/to/gcs-credentials.json  # Optional: path to service account key
+
+# ['remote "gdrive"']
+#     url = gdrive://your-folder-id
+

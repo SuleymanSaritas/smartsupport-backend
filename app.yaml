@@ -1,0 +1,43 @@
+# Google Cloud Run configuration
+# This file is used for deploying to Google Cloud Run
+
+runtime: python39
+
+env: flex
+
+# Environment variables (set these in Cloud Run console or via gcloud)
+env_variables:
+  API_KEY: "your-api-key-here"  # Set via Cloud Run secrets or environment variables
+  DEBUG: "False"
+  REDIS_HOST: "your-redis-instance"  # Cloud Memorystore Redis instance
+  REDIS_PORT: "6379"
+
+# Automatic scaling
+automatic_scaling:
+  min_num_instances: 1
+  max_num_instances: 10
+
+# Resources
+resources:
+  cpu: 2
+  memory_gb: 4
+  disk_size_gb: 20
+
+# Health check
+readiness_check:
+  path: "/health"
+  check_interval_sec: 5
+  timeout_sec: 4
+  failure_threshold: 2
+  success_threshold: 2
+
+liveness_check:
+  path: "/health"
+  check_interval_sec: 30
+  timeout_sec: 4
+  failure_threshold: 4
+  success_threshold: 2
+
+# Note: For Cloud Run, use cloudbuild.yaml or deploy via:
+# gcloud run deploy smartsupport-backend --source .
+

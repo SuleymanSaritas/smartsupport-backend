@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: smartsupport-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - smartsupport-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: .
+    container_name: smartsupport-backend
+    user: root  # Run as root to fix Windows volume permission issues
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - smartsupport-network
+    volumes:
+      - .:/app
+      - huggingface_cache:/root/.cache/huggingface
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+  worker:
+    build: .
+    container_name: smartsupport-worker
+    user: root  # Run as root to fix Windows volume permission issues
+    env_file:
+      - .env
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - smartsupport-network
+    volumes:
+      - .:/app
+      - huggingface_cache:/root/.cache/huggingface
+    command: celery -A app.worker.celery_app worker --loglevel=info --concurrency=2
+
+volumes:
+  redis_data:
+  huggingface_cache:
+
+networks:
+  smartsupport-network:
+    driver: bridge
+
+

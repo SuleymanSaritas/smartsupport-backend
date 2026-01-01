@@ -1,0 +1,88 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Environment variables (Security Risk!)
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Docker
+.dockerignore
+
+# Database files
+smartsupport.db
+smartsupport.db-journal
+smartsupport.db-wal
+smartsupport.db-shm
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite3
+
+# AI Models (Hugging Face cache - tracked via DVC if needed)
+.cache/
+.huggingface/
+models/  # Custom models directory (if created)
+*.bin
+*.safetensors
+*.pt
+*.pth
+# Note: app/models/ contains Python code (schemas, SQL models) - DO NOT ignore
+
+# Data files (if any raw data exists)
+data/
+*.csv
+*.json
+*.parquet
+
+# DVC
+.dvc/cache/
+.dvc/tmp/
+# Note: .dvc/config and .dvcignore should be tracked in Git
+
+# Google Cloud
+.gcloud/
+*.yaml.bak
+# Note: app.yaml and cloudbuild.yaml should be tracked in Git
+
+
+
+

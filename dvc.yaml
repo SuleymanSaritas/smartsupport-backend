@@ -1,0 +1,24 @@
+# DVC pipeline configuration
+# This file tracks large files and models using DVC
+
+stages:
+  # Track Hugging Face model cache directory
+  # Models are downloaded to ~/.cache/huggingface/ by default
+  # We'll track a models directory if you want to version control specific models
+  models:
+    cmd: echo "Models are tracked via DVC remote storage"
+    deps:
+      - .dvcignore
+    outs:
+      # Uncomment and adjust paths if you want to track specific model files
+      # - app/models/
+      # - models/cache/
+
+  # Optional: Track database for development
+  # Uncomment if you want to version control the dev database
+  # database:
+  #   cmd: echo "Database tracked via DVC"
+  #   deps: []
+  #   outs:
+  #     - smartsupport.db
+
