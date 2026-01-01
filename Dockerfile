@@ -36,6 +36,9 @@ RUN (useradd -m -u 1000 -s /bin/bash celeryuser 2>/dev/null || true) && \
 # This layer will rebuild on code changes, but dependencies are cached
 COPY . .
 
+# Make start script executable
+RUN chmod +x start.sh
+
 # Ensure app directory is accessible
 RUN chmod -R 755 /app
 
@@ -43,8 +46,7 @@ RUN chmod -R 755 /app
 EXPOSE 8000
 EXPOSE 8080
 
-# Default command (can be overridden in docker-compose or Cloud Run)
-# Google Cloud Run uses PORT environment variable, defaults to 8080
-CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
+# Use start.sh to run both Celery worker and Uvicorn API
+CMD ["./start.sh"]
 
 
