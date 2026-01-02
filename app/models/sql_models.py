@@ -16,6 +16,7 @@ class Ticket(Base):
     language = Column(String(10), nullable=False, comment="Detected language code")
     response_text = Column(Text, nullable=True, comment="Generated response text")
     translated_text = Column(Text, nullable=True, comment="English translation of the text (if original was Turkish)")
+    prediction_details = Column(Text, nullable=True, comment="JSON string of top 3 predictions")
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     
     def __repr__(self):

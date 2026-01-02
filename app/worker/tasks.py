@@ -1,4 +1,5 @@
 """Celery tasks for async ticket processing."""
+import json
 import logging
 import traceback
 from app.worker.celery_app import celery_app
@@ -44,10 +45,15 @@ def process_ticket_task(self, text: str) -> dict:
         confidence = result.get("confidence", 0.0)
         language = result.get("language", "en")
         translated_text = result.get("translated_text", None)
+        predictions = result.get("predictions", [])  # Get top 3 predictions list
         
         logger.info(f"Task {task_id} - Prediction complete: intent={intent}, confidence={confidence:.3f}, language={language}")
         if translated_text:
             logger.info(f"Task {task_id} - Translation: {translated_text[:50]}...")
+        
+        # Convert predictions list to JSON string for storage
+        prediction_details_json = json.dumps(predictions) if predictions else None
+        logger.debug(f"Task {task_id} - Top 3 predictions: {prediction_details_json}")
         
         # Generate varied response based on intent and language
         response_text = generate_response(intent, language)
@@ -56,6 +62,7 @@ def process_ticket_task(self, text: str) -> dict:
         # Add masked text and response to result
         result["sanitized_text"] = masked_text  # Use masked text, not original
         result["response_text"] = response_text
+        result["prediction_details"] = prediction_details_json  # Add JSON string to result
         
         # Save ticket to database with explicit logging
         # IMPORTANT: Save masked_text to DB, not original text
@@ -70,7 +77,8 @@ def process_ticket_task(self, text: str) -> dict:
                 confidence=confidence,
                 language=language,
                 response_text=response_text,
-                translated_text=translated_text  # Store the English translation
+                translated_text=translated_text,  # Store the English translation
+                prediction_details=prediction_details_json  # Store top 3 predictions as JSON string
             )
             
             db.add(ticket_entry)

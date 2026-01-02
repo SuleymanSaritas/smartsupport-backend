@@ -1,8 +1,6 @@
 # Google Cloud Build configuration for Cloud Run deployment
-# Build and deploy the containerized application
-
 steps:
-  # Build the container image
+  # 1. Container Image Oluştur (Build)
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'build'
@@ -12,7 +10,7 @@ steps:
       - 'gcr.io/$PROJECT_ID/smartsupport-backend:latest'
       - '.'
 
-  # Push the container image to Container Registry
+  # 2. Container Image'ı Kayıt Defterine Gönder (Push)
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'push'
@@ -23,31 +21,36 @@ steps:
       - 'push'
       - 'gcr.io/$PROJECT_ID/smartsupport-backend:latest'
 
-  # Deploy to Cloud Run
+  # 3. Cloud Run'a Deploy Et (KRİTİK AYARLAR BURADA)
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
+      - 'beta'  # 'beta' komutlarını kullanmak daha güvenli (no-cpu-throttling için)
       - 'run'
       - 'deploy'
       - 'smartsupport-backend'
       - '--image'
       - 'gcr.io/$PROJECT_ID/smartsupport-backend:$COMMIT_SHA'
       - '--region'
-      - 'europe-west3'  # (Bölgene göre burası us-central1 da olabilir)
+      - 'europe-west3'
       - '--platform'
       - 'managed'
       - '--port'
       - '8080'
+      # 👇 DÜZELTİLEN AYARLAR 👇
       - '--memory'
-      - '4Gi'
+      - '8Gi'          # 4Gi YERİNE 8Gi YAPTIK
       - '--cpu'
       - '2'
       - '--min-instances'
-      - '1'
+      - '1'            # Soğuk başlangıcı önlemek için
       - '--max-instances'
-      - '10'
+      - '1'            # KOTA AŞMAMAK İÇİN 10 YERİNE 1 YAPTIK
+      - '--no-cpu-throttling' # Worker çalışsın diye CPU'yu kesme dedik
+      - '--vpc-connector'
+      - 'redis-connector'     # Redis'e ulaşabilmesi için köprüyü ekledik
+      # 👆 DÜZELTİLEN AYARLAR BİTTİ 👆
       - '--allow-unauthenticated'
-      
 
 images:
   - 'gcr.io/$PROJECT_ID/smartsupport-backend:$COMMIT_SHA'
@@ -58,4 +61,3 @@ options:
   logging: CLOUD_LOGGING_ONLY
 
 timeout: '3600s'
-

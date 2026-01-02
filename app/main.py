@@ -193,7 +193,8 @@ async def get_ticket_status(
                     predictions=predictions,
                     sanitized_text=result_data.get("sanitized_text"),
                     response_text=result_data.get("response_text"),
-                    translated_text=result_data.get("translated_text")
+                    translated_text=result_data.get("translated_text"),
+                    prediction_details=result_data.get("prediction_details")
                 )
             else:
                 # Task failed
@@ -286,6 +287,7 @@ async def get_history(
                 language=ticket.language,
                 response_text=ticket.response_text,
                 translated_text=ticket.translated_text,
+                prediction_details=getattr(ticket, 'prediction_details', None),
                 created_at=ticket.created_at.isoformat() if ticket.created_at else ""
             )
             for ticket in tickets
@@ -338,6 +340,7 @@ async def debug_database(
                     "intent": t.intent,
                     "language": t.language,
                     "sanitized_text": getattr(t, 'sanitized_text', t.text),
+                    "prediction_details": getattr(t, 'prediction_details', None),
                     "translated_text": t.translated_text,
                     "created_at": t.created_at.isoformat() if t.created_at else None
                 }

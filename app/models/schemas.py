@@ -34,6 +34,7 @@ class AnalysisResult(BaseModel):
     sanitized_text: Optional[str] = Field(None, description="PII-masked version of the input text")
     response_text: Optional[str] = Field(None, description="Generated natural language response")
     translated_text: Optional[str] = Field(None, description="English translation of the text (if original was Turkish)")
+    prediction_details: Optional[str] = Field(None, description="JSON string of top 3 predictions")
 
 
 class TicketHistory(BaseModel):
@@ -46,6 +47,7 @@ class TicketHistory(BaseModel):
     language: str = Field(..., description="Detected language")
     response_text: Optional[str] = Field(None, description="Generated response")
     translated_text: Optional[str] = Field(None, description="English translation of the text (if original was Turkish)")
+    prediction_details: Optional[str] = Field(None, description="JSON string of top 3 predictions")
     created_at: str = Field(..., description="Creation timestamp")
 
 
