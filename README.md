@@ -477,8 +477,8 @@ smartsupport-backend/
 │   ├── setup-dvc.ps1     # DVC setup (Windows)
 │   └── start.sh          # Container startup
 ├── deployment/            # Deployment configs
-│   ├── cloudbuild.yaml   # Google Cloud Build
 │   └── app.yaml          # App Engine config
+├── cloudbuild.yaml        # Google Cloud Build (must be at root)
 ├── reports/               # Test reports
 ├── .dockerignore          # Docker exclusions
 ├── .gcloudignore          # Cloud Build exclusions
