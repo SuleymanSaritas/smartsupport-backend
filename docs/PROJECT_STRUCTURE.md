@@ -32,6 +32,21 @@ smartsupport-backend/
 │   ├── __init__.py
 │   └── test_api.py              # API endpoint tests
 │
+├── docs/                         # Documentation
+│   ├── DEPLOYMENT.md            # Deployment guide
+│   ├── PROJECT_STRUCTURE.md     # This file
+│   ├── TEST_RESULTS.md          # Test results
+│   └── QUICK_FIX.md             # Quick troubleshooting guide
+│
+├── scripts/                      # Utility scripts
+│   ├── setup-dvc.sh             # DVC setup script (Unix)
+│   ├── setup-dvc.ps1            # DVC setup script (Windows)
+│   └── start.sh                 # Container startup script
+│
+├── deployment/                   # Deployment configurations
+│   ├── cloudbuild.yaml          # Google Cloud Build configuration
+│   └── app.yaml                 # Google App Engine configuration
+│
 ├── reports/                      # Test reports and documentation
 │   ├── Final_Ratio_Result.png
 │   ├── Locust_Charts.png
@@ -40,19 +55,13 @@ smartsupport-backend/
 ├── .dockerignore                 # Docker build exclusions
 ├── .gcloudignore                 # Google Cloud Build exclusions
 ├── .gitignore                    # Git exclusions
-├── cloudbuild.yaml               # Google Cloud Build configuration
-├── DEPLOYMENT.md                 # Deployment guide
 ├── docker-compose.yml            # Local development orchestration
 ├── Dockerfile                    # Container image definition
 ├── dvc.yaml                      # DVC pipeline configuration
 ├── locustfile.py                 # Load testing configuration
 ├── pytest.ini                    # Pytest configuration
 ├── README.md                     # Project documentation
-├── requirements.txt              # Python dependencies
-├── setup-dvc.ps1                 # DVC setup script (Windows)
-├── setup-dvc.sh                  # DVC setup script (Unix)
-├── start.sh                      # Container startup script
-└── TEST_RESULTS.md               # Test results documentation
+└── requirements.txt              # Python dependencies
 ```
 
 ## Structure Principles
@@ -67,8 +76,8 @@ smartsupport-backend/
 - Follows FastAPI best practices
 - Clear separation between API, business logic, and data layers
 - Test suite in dedicated `tests/` directory
-- Configuration management via environment variables
-- Docker containerization for deployment
+- Configuration files at root level
+- Documentation and reports in dedicated directories
 
 ### File Organization
 - Each module has clear, single responsibility

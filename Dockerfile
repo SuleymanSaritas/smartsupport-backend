@@ -37,7 +37,7 @@ RUN (useradd -m -u 1000 -s /bin/bash celeryuser 2>/dev/null || true) && \
 COPY . .
 
 # Make start script executable
-RUN chmod +x start.sh
+RUN chmod +x scripts/start.sh
 
 # Ensure app directory is accessible
 RUN chmod -R 755 /app
@@ -47,6 +47,6 @@ EXPOSE 8000
 EXPOSE 8080
 
 # Use start.sh to run both Celery worker and Uvicorn API
-CMD ["./start.sh"]
+CMD ["./scripts/start.sh"]
 
 

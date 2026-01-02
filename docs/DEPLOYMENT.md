@@ -23,11 +23,11 @@ DVC (Data Version Control) is used to track large files like ML models without b
 
 ```bash
 # On Linux/Mac
-chmod +x setup-dvc.sh
-./setup-dvc.sh
+chmod +x scripts/setup-dvc.sh
+./scripts/setup-dvc.sh
 
 # On Windows (PowerShell)
-.\setup-dvc.ps1
+.\scripts\setup-dvc.ps1
 ```
 
 **Option 2: Manual setup**
@@ -77,7 +77,7 @@ dvc pull
 
 ```bash
 # Submit build to Cloud Build
-gcloud builds submit --config cloudbuild.yaml
+gcloud builds submit --config deployment/cloudbuild.yaml
 ```
 
 ### Option 2: Deploy via Cloud Run CLI

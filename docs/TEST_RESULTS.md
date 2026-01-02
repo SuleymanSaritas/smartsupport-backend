@@ -39,7 +39,7 @@ app/main.py:77
           on_event is deprecated, use lifespan event handlers instead.      
 
           Read more about it in the
-          [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+          [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/initialization-events/).
 
     return self.router.on_event(event_type)
 
@@ -50,3 +50,4 @@ app/main.py:77
 - **Passed:** 6
 - **Failed:** 0
 - **Modules Verified:** API Endpoints, Rate Limiting, Database Connection, Celery Task Creation.
+

@@ -1,4 +1,6 @@
 # Google Cloud Build configuration for Cloud Run deployment
+# Build and deploy the containerized application
+
 steps:
   # Build container image
   - name: 'gcr.io/cloud-builders/docker'
@@ -59,3 +61,4 @@ options:
   logging: CLOUD_LOGGING_ONLY
 
 timeout: '3600s'
+

@@ -38,6 +38,6 @@ liveness_check:
   failure_threshold: 4
   success_threshold: 2
 
-# Note: For Cloud Run, use cloudbuild.yaml or deploy via:
+# Note: For Cloud Run, use deployment/cloudbuild.yaml or deploy via:
 # gcloud run deploy smartsupport-backend --source .
 

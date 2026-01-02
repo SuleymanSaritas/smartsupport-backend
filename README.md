@@ -170,7 +170,7 @@ This uses the `cloudbuild.yaml` configuration file:
 
 ```bash
 # Submit build to Cloud Build
-gcloud builds submit --config cloudbuild.yaml
+gcloud builds submit --config deployment/cloudbuild.yaml
 
 # Monitor build progress
 gcloud builds list --limit=1
@@ -467,20 +467,31 @@ smartsupport-backend/
 │   ├── worker/            # Celery worker tasks
 │   └── main.py            # FastAPI application entry point
 ├── tests/                 # Test suite
-├── reports/               # Test reports and documentation
-├── .dockerignore          # Docker build exclusions
-├── .gcloudignore          # Google Cloud Build exclusions
-├── cloudbuild.yaml        # Google Cloud Build configuration
-├── docker-compose.yml     # Local development orchestration
-├── Dockerfile             # Container image definition
-├── locustfile.py          # Load testing configuration
-├── pytest.ini             # Pytest configuration
-├── requirements.txt       # Python dependencies
-├── start.sh               # Container startup script
+├── docs/                  # Documentation
+│   ├── DEPLOYMENT.md     # Deployment guide
+│   ├── PROJECT_STRUCTURE.md # Project structure
+│   ├── TEST_RESULTS.md   # Test results
+│   └── QUICK_FIX.md      # Troubleshooting guide
+├── scripts/               # Utility scripts
+│   ├── setup-dvc.sh      # DVC setup (Unix)
+│   ├── setup-dvc.ps1     # DVC setup (Windows)
+│   └── start.sh          # Container startup
+├── deployment/            # Deployment configs
+│   ├── cloudbuild.yaml   # Google Cloud Build
+│   └── app.yaml          # App Engine config
+├── reports/               # Test reports
+├── .dockerignore          # Docker exclusions
+├── .gcloudignore          # Cloud Build exclusions
+├── docker-compose.yml     # Local development
+├── Dockerfile             # Container definition
+├── dvc.yaml              # DVC configuration
+├── locustfile.py          # Load testing
+├── pytest.ini             # Pytest config
+├── requirements.txt       # Dependencies
 └── README.md              # This file
 ```
 
-See `PROJECT_STRUCTURE.md` for detailed structure documentation.
+See `docs/PROJECT_STRUCTURE.md` for detailed structure documentation.
 
 ## Development Guidelines
 
@@ -551,7 +562,7 @@ docker-compose restart redis
 
 **Build timeout:**
 - Build may take 20-30 minutes first time (downloading models)
-- `cloudbuild.yaml` timeout is set to 3600s (1 hour)
+- `deployment/cloudbuild.yaml` timeout is set to 3600s (1 hour)
 - Subsequent builds are faster due to Docker layer caching
 
 ## Environment Variables Reference
@@ -573,5 +584,5 @@ docker-compose restart redis
 
 For issues and questions:
 - Open an issue on GitHub
-- Check `DEPLOYMENT.md` for deployment-specific help
+- Check `docs/DEPLOYMENT.md` for deployment-specific help
 - Review `TEST_RESULTS.md` for test documentation
