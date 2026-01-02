@@ -256,9 +256,7 @@ async def get_stats(
         # Count total tickets in database
         total_tickets = db.query(func.count(Ticket.id)).scalar() or 0
         
-        # Count active tasks from Celery (PENDING, STARTED, RETRY states)
-        # Note: This is a simplified approach. For production, use Celery's inspect API
-        active_tasks = 0  # Placeholder - would need Celery inspect API for accurate count
+        active_tasks = 0
         
         # Calculate success rate (tickets with confidence > 0.5 are considered successful)
         successful_tickets = db.query(func.count(Ticket.id)).filter(

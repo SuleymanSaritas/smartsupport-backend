@@ -67,8 +67,6 @@ class PIIGuardrail:
             return text
         
         try:
-            # Configure analyzer to look for specific PII types
-            # Note: Presidio will detect all supported entities, but we can filter if needed
             supported_entities = [
                 "PHONE_NUMBER",
                 "EMAIL_ADDRESS",

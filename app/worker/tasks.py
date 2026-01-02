@@ -35,8 +35,6 @@ def process_ticket_task(self, text: str) -> dict:
         masked_text = guardrail.anonymize(text)
         logger.info(f"Task {task_id} - PII masking complete")
         
-        # Run model prediction on masked text
-        # Note: ModelManager will lazy-load models if not already loaded (for worker processes)
         logger.info(f"Task {task_id} - Starting prediction...")
         result = model_manager.predict(masked_text)
         
@@ -64,8 +62,6 @@ def process_ticket_task(self, text: str) -> dict:
         result["response_text"] = response_text
         result["prediction_details"] = prediction_details_json  # Add JSON string to result
         
-        # Save ticket to database with explicit logging
-        # IMPORTANT: Save masked_text to DB, not original text
         logger.info(f"Task {task_id} - SAVING TO DB...")
         print(f"Task {task_id} - SAVING TO DB...")
         

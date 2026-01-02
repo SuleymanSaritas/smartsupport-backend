@@ -1,6 +1,6 @@
 # Google Cloud Build configuration for Cloud Run deployment
 steps:
-  # 1. Container Image Oluştur (Build)
+  # Build container image
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'build'
@@ -10,7 +10,7 @@ steps:
       - 'gcr.io/$PROJECT_ID/smartsupport-backend:latest'
       - '.'
 
-  # 2. Container Image'ı Kayıt Defterine Gönder (Push)
+  # Push container image to registry
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'push'
@@ -21,11 +21,11 @@ steps:
       - 'push'
       - 'gcr.io/$PROJECT_ID/smartsupport-backend:latest'
 
-  # 3. Cloud Run'a Deploy Et (KRİTİK AYARLAR BURADA)
+  # Deploy to Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
-      - 'beta'  # 'beta' komutlarını kullanmak daha güvenli (no-cpu-throttling için)
+      - 'beta'
       - 'run'
       - 'deploy'
       - 'smartsupport-backend'
@@ -37,19 +37,17 @@ steps:
       - 'managed'
       - '--port'
       - '8080'
-      # 👇 DÜZELTİLEN AYARLAR 👇
       - '--memory'
-      - '8Gi'          # 4Gi YERİNE 8Gi YAPTIK
+      - '8Gi'
       - '--cpu'
       - '2'
       - '--min-instances'
-      - '1'            # Soğuk başlangıcı önlemek için
+      - '1'
       - '--max-instances'
-      - '1'            # KOTA AŞMAMAK İÇİN 10 YERİNE 1 YAPTIK
-      - '--no-cpu-throttling' # Worker çalışsın diye CPU'yu kesme dedik
+      - '1'
+      - '--no-cpu-throttling'
       - '--vpc-connector'
-      - 'redis-connector'     # Redis'e ulaşabilmesi için köprüyü ekledik
-      # 👆 DÜZELTİLEN AYARLAR BİTTİ 👆
+      - 'redis-connector'
       - '--allow-unauthenticated'
 
 images:
