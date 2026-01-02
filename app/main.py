@@ -2,8 +2,13 @@
 import logging
 import traceback
 from typing import List
-from fastapi import FastAPI, HTTPException, Depends, status
+from fastapi import FastAPI, HTTPException, Depends, status, Request
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
+from slowapi.middleware import SlowAPIMiddleware
 from celery.result import AsyncResult
 from sqlalchemy.orm import Session
 from sqlalchemy import func
@@ -38,6 +43,26 @@ app = FastAPI(
     version=settings.VERSION,
     debug=settings.DEBUG
 )
+
+# Initialize rate limiter
+limiter = Limiter(key_func=get_remote_address)
+app.state.limiter = limiter
+
+# Add rate limiting middleware
+app.add_middleware(SlowAPIMiddleware)
+
+# Add rate limit exception handler with custom JSON response
+@app.exception_handler(RateLimitExceeded)
+async def rate_limit_handler(request: Request, exc: RateLimitExceeded):
+    """Custom exception handler for rate limit exceeded errors."""
+    return JSONResponse(
+        status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+        content={
+            "error": "Rate limit exceeded",
+            "message": "You have exceeded the rate limit of 5 requests per minute. Please try again later.",
+            "retry_after": exc.retry_after if hasattr(exc, 'retry_after') else None
+        }
+    )
 
 # CORS middleware
 app.add_middleware(
@@ -102,7 +127,9 @@ async def health_check():
     status_code=status.HTTP_202_ACCEPTED,
     tags=["Tickets"]
 )
+@limiter.limit("5/minute")
 async def create_ticket(
+    request: Request,
     ticket: TicketInput,
     api_key: str = Depends(verify_api_key)
 ) -> TaskResponse:
