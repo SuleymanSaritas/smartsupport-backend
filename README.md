@@ -576,12 +576,6 @@ docker-compose restart redis
 | `DEBUG` | `False` | Enable debug mode |
 | `PORT` | `8000` | Server port (Cloud Run uses 8080) |
 
-## License
-
-[Your License Here]
-
-## Support
-
 For issues and questions:
 - Open an issue on GitHub
 - Check `docs/DEPLOYMENT.md` for deployment-specific help
