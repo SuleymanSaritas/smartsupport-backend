@@ -65,6 +65,7 @@ def process_ticket_task(self, text: str) -> dict:
         try:
             ticket_entry = Ticket(
                 text=masked_text,  # Save masked text to database (PII already anonymized)
+                sanitized_text=masked_text,  # Also store in sanitized_text column for API response
                 intent=intent,
                 confidence=confidence,
                 language=language,

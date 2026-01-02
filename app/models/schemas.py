@@ -40,6 +40,7 @@ class TicketHistory(BaseModel):
     """Schema for ticket history item."""
     id: int = Field(..., description="Ticket ID")
     text: str = Field(..., description="Original ticket text")
+    sanitized_text: Optional[str] = Field(None, description="PII-masked version of the input text")
     intent: str = Field(..., description="Predicted intent")
     confidence: float = Field(..., description="Confidence score")
     language: str = Field(..., description="Detected language")

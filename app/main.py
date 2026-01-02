@@ -280,6 +280,7 @@ async def get_history(
             TicketHistory(
                 id=ticket.id,
                 text=ticket.text,
+                sanitized_text=ticket.sanitized_text if hasattr(ticket, 'sanitized_text') else ticket.text,
                 intent=ticket.intent,
                 confidence=ticket.confidence,
                 language=ticket.language,
@@ -336,6 +337,7 @@ async def debug_database(
                     "id": t.id,
                     "intent": t.intent,
                     "language": t.language,
+                    "sanitized_text": getattr(t, 'sanitized_text', t.text),
                     "translated_text": t.translated_text,
                     "created_at": t.created_at.isoformat() if t.created_at else None
                 }

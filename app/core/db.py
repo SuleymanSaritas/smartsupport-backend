@@ -53,7 +53,27 @@ def get_db():
 
 
 def init_db():
-    """Initialize database by creating all tables."""
+    """Initialize database by creating all tables and migrating existing ones."""
     from app.models.sql_models import Ticket  # Import to register models
+    from sqlalchemy import text
+    
     Base.metadata.create_all(bind=engine)
+    
+    # Migrate existing tables: Add sanitized_text column if it doesn't exist
+    # This handles existing databases that were created before the column was added
+    try:
+        with engine.begin() as conn:  # begin() handles transaction automatically
+            # Check if sanitized_text column exists
+            result = conn.execute(
+                text("SELECT name FROM pragma_table_info('tickets') WHERE name='sanitized_text'")
+            )
+            if not result.fetchone():
+                # Column doesn't exist, add it
+                logger.info("Adding sanitized_text column to tickets table...")
+                conn.execute(text("ALTER TABLE tickets ADD COLUMN sanitized_text TEXT"))
+                logger.info("✅ sanitized_text column added successfully")
+            else:
+                logger.debug("sanitized_text column already exists")
+    except Exception as e:
+        logger.warning(f"Could not migrate sanitized_text column (may already exist): {str(e)}")
 

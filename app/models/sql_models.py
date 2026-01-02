@@ -10,6 +10,7 @@ class Ticket(Base):
     
     id = Column(Integer, primary_key=True, index=True)
     text = Column(Text, nullable=False, comment="Original ticket text")
+    sanitized_text = Column(Text, nullable=True, comment="PII-masked version of the input text")
     intent = Column(String(255), nullable=False, comment="Predicted intent/classification")
     confidence = Column(Float, nullable=False, comment="Confidence score of prediction")
     language = Column(String(10), nullable=False, comment="Detected language code")
